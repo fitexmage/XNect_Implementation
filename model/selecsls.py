@@ -165,7 +165,7 @@ class SelecSLSBlockFused(nn.Module):
             return [self.conv6(torch.cat([d1, d2, d3, x[1]], 1)) , x[1]]
 
 class Net(nn.Module):
-    def __init__(self, nClasses=1000, config='SelecSLS60'):
+    def __init__(self, config='SelecSLS60'):
         super(Net, self).__init__()
 
         #Stem
@@ -258,21 +258,12 @@ class Net(nn.Module):
             self.features.append(SelecSLSBlock(inp, skip, k, oup, isFirst, stride))
         self.features = nn.Sequential(*self.features)
 
-        #Classifier To Produce Inputs to Softmax
-        self.classifier = nn.Sequential(
-                nn.Linear(1280, nClasses),
-        )
-
 
     def forward(self, x):
         x = self.stem(x)
         x = self.features([x])
-        # x = self.head(x[0])
-        # x = x.mean(3).mean(2)
-        # x = self.classifier(x)
-        #x = F.log_softmax(x)
+        x = x[0]
         return x
-
 
 
     def prune_and_fuse(self, gamma_thresh, verbose=False):
