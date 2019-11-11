@@ -16,7 +16,7 @@ def parse_criterion(criterion):
 
 def create_model(opt):
     model = Stage_1_Model(19, 17, True)
-    model.load_state_dict(torch.load('SelecSLS60_statedict.pth'), strict=False)
+    model.load_state_dict(torch.load('../save/SelecSLS60_statedict.pth'), strict=False)
     criterion_hm = parse_criterion(opt.criterionHm)
     criterion_paf = parse_criterion(opt.criterionPaf)
     return model, criterion_hm, criterion_paf
