@@ -404,31 +404,33 @@ def decode_pose(img_orig, param, heatmaps, pafs):
     # Bottom-up approach:
     # Step 1: find all joints in the image (organized by joint type: [0]=nose,
     # [1]=neck...)
+    print("a")
     joint_list_per_joint_type = NMS(param,
                                     heatmaps, img_orig.shape[0] / float(heatmaps.shape[0]))
-
+    print("b")
     # joint_list is an unravel'd version of joint_list_per_joint, where we add
     # a 5th column to indicate the joint_type (0=nose, 1=neck...)
     joint_list = np.array([tuple(peak) + (joint_type,) for joint_type,
                                                            joint_peaks in enumerate(joint_list_per_joint_type) for peak
                            in joint_peaks])
-
+    print("c")
     # Step 2: find which joints go together to form limbs (which wrists go
     # with which elbows)
     paf_upsamp = cv2.resize(
         pafs, (img_orig.shape[1], img_orig.shape[0]), interpolation=cv2.INTER_CUBIC)
+    print("d")
     connected_limbs = find_connected_joints(param,
                                             paf_upsamp, joint_list_per_joint_type)
-
+    print("e")
 
     # Step 3: associate limbs that belong to the same person
     person_to_joint_assoc = group_limbs_of_same_person(
         connected_limbs, joint_list)
-
+    print("f")
 
     # (Step 4): plot results
     to_plot, canvas = plot_pose(img_orig, joint_list, person_to_joint_assoc)
-
+    print("g")
     return to_plot, canvas, joint_list, person_to_joint_assoc
 
 def append_result(image_id, person_to_joint_assoc, joint_list, outputs):
