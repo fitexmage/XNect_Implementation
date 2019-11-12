@@ -277,7 +277,6 @@ class Net(nn.Module):
 
         #We bring everything to the CPU, then later restore the device
         device = next(self.parameters()).device
-        print(device)
         self.to("cpu")
         with torch.no_grad():
             #Assumes that stem is flat and has conv,bn,relu in order. Can handle one or more of these if one wants to deepen the stem.
