@@ -3,6 +3,7 @@ from .xnect_1 import Stage_1_Model
 from .paf_model import PAFModel
 import torch.nn as nn
 import torch
+import os
 
 
 def parse_criterion(criterion):
@@ -15,8 +16,11 @@ def parse_criterion(criterion):
 
 
 def create_model(opt):
-    model = Stage_1_Model(19, 17, True)
-    model.load_state_dict(torch.load('../save/SelecSLS60_statedict.pth'), strict=False)
+    model = Stage_1_Model(num_joints=19, num_paf=17, only_2d=True)
+    if os.path.exists(opt.saveDir):
+        model.load_state_dict(torch.load(os.path.join(opt.saveDir, 'model_{}.pth'.format(1))))
+    else:
+        model.load_state_dict(torch.load('../save/SelecSLS60_statedict.pth'), strict=False)
     criterion_hm = parse_criterion(opt.criterionHm)
     criterion_paf = parse_criterion(opt.criterionPaf)
     return model, criterion_hm, criterion_paf

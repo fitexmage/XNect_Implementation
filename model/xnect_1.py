@@ -68,7 +68,7 @@ class Stage_1_Model(nn.Module):
         self.conv_3d_3 = Conv_3x3(192, 160, 3)
         self.conv_3d_5 = Conv_3x3(160, 160, 1)
         self.conv_3d_6 = Conv_3x3(160, 128, 3)
-        self.conv_3d_7 = Conv_3x3(128, self.num_paf * 3, 3)
+        self.conv_3d_7 = Conv_3x3(128, self.num_joints * 3, 3)
 
     def forward(self, x):
         d_selecsls = self.selecsls(x)
@@ -87,7 +87,7 @@ class Stage_1_Model(nn.Module):
         d_3d_1 = self.conv_3d_1(d_selecsls)
         d_3d_2 = self.deconv_3d_2(d_3d_1)
         d_3d_3 = self.conv_3d_3(d_3d_2)
-        d_3d_4 = self.concat_3d_4 = torch.cat(d_2d_2, d_3d_3)
+        d_3d_4 = self.concat_3d_4 = torch.cat((d_2d_2, d_3d_3), 1)
         d_3d_5 = self.conv_3d_5(d_3d_4)
         d_3d_6 = self.conv_3d_6(d_3d_5)
         conv_3d_7 = self.conv_3d_7(d_3d_6)
