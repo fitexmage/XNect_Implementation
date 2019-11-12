@@ -11,7 +11,8 @@ class Conv_1x1(nn.Module):
         self.kernel = kernel
 
     def forward(self, x):
-        conv = nn.Conv2d(self.inp, self.oup, self.kernel, padding=0)(x)
+        device = torch.device("cuda:0")
+        conv = nn.Conv2d(self.inp, self.oup, self.kernel, padding=0).to(device)(x)
         bn = nn.BatchNorm2d(self.oup)(conv)
         relu = nn.ReLU(inplace=True)(bn)
         return relu
@@ -55,6 +56,8 @@ class Stage_1_Model(nn.Module):
 
         self.selecsls = selecsls.Net(config='SelecSLS60')
         self.conv_2d_1 = Conv_1x1(416, 256, 1)
+        device = torch.device("cuda:0")
+        self.conv_2d_1.to(device)
         self.deconv_2d_2 = Deconv(256, 192, 4, 2, 4)
         self.conv_2d_3 = Conv_3x3(192, 128, 3)
         self.conv_2d_4 = Conv_3x3(128, 96, 3)
@@ -68,7 +71,6 @@ class Stage_1_Model(nn.Module):
         self.conv_3d_7 = Conv_3x3(128, self.num_paf * 3, 3)
 
     def forward(self, x):
-        print(x.is_cuda)
         d_selecsls = self.selecsls(x)
         d_2d_1 = self.conv_2d_1(d_selecsls)
         d_2d_2 = self.deconv_2d_2(d_2d_1)
