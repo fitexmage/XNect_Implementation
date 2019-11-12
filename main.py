@@ -21,9 +21,9 @@ def main():
 
     # Create nn
     model, criterion_hm, criterion_paf = create_model(opt)
-    # model = model.cuda()
-    # criterion_hm = criterion_hm.cuda()
-    # criterion_paf = criterion_paf.cuda()
+    model = model.cuda()
+    criterion_hm = criterion_hm.cuda()
+    criterion_paf = criterion_paf.cuda()
 
     # Create optimizer
     optimizer = create_optimizer(opt, model)
@@ -37,12 +37,12 @@ def main():
     visualize_out = opt.vizOut
 
     # train/ test
-    train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, optimizer, n_epochs,
-              val_interval, learn_rate, drop_lr, opt.saveDir, visualize_out)
+    # train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, optimizer, n_epochs,
+    #           val_interval, learn_rate, drop_lr, opt.saveDir, visualize_out)
 
     # validate_net(test_loader, model, criterion_hm, criterion_paf, viz_output=visualize_out)
 
-    # eval_net(train_loader, model, opt)
+    eval_net(train_loader, model, opt)
 
 if __name__ == '__main__':
     main()
