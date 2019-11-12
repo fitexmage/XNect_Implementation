@@ -179,14 +179,18 @@ def find_connected_joints(param, paf_upsamp, joint_list_per_joint_type, num_inte
         # List of all joints of type A found, where A is specified by limb_type
         # (eg: a right forearm starts in a right elbow)
         joints_src = joint_list_per_joint_type[joint_to_limb_heatmap_relationship[limb_type][0]]
+        print("b")
         # List of all joints of type B found, where B is specified by limb_type
         # (eg: a right forearm ends in a right wrist)
         joints_dst = joint_list_per_joint_type[joint_to_limb_heatmap_relationship[limb_type][1]]
+        print("c")
         if len(joints_src) == 0 or len(joints_dst) == 0:
             # No limbs of this type found (eg: no right forearms found because
             # we didn't find any right wrists or right elbows)
             connected_limbs.append([])
+            print("d")
         else:
+            print("e")
             connection_candidates = []
             # Specify the paf index that contains the x-coord of the paf for
             # this limb
@@ -194,6 +198,7 @@ def find_connected_joints(param, paf_upsamp, joint_list_per_joint_type, num_inte
             # And the y-coord paf index
             limb_intermed_coords[3, :] = 2*limb_type + 1
             for i, joint_src in enumerate(joints_src):
+                print("f")
                 # Try every possible joints_src[i]-joints_dst[j] pair and see
                 # if it's a feasible limb
                 for j, joint_dst in enumerate(joints_dst):
