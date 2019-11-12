@@ -64,7 +64,7 @@ def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimi
 def train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, optimizer,
               n_epochs, val_interval, learn_rate, drop_lr, save_dir, viz_output=False):
     heatmap_loss_avg, paf_loss_avg = 0.0, 0.0
-    writer = SummaryWriter()
+    writer = SummaryWriter(os.path.join(save_dir, 'runs'))
     for epoch in range(1, n_epochs + 1):
         heatmap_loss_avg, paf_loss_avg = step(train_loader, model, criterion_hm, criterion_paf, True, optimizer, viz_output=viz_output, epoch=epoch, writer=writer)
         print("Epoch: ", epoch)
