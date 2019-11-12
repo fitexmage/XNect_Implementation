@@ -56,7 +56,7 @@ def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimi
             paf_loss_meter.update(loss_paf_total.data.cpu().numpy())
             t.set_postfix(loss_hm='{:05.3f}'.format(hm_loss_meter.avg), loss_paf='{:05.3f}'.format(paf_loss_meter.avg))
             t.update()
-            writer.add_scalar('hm loss', hm_loss_meter.avg, global_step=nIters*epoch+i)
+            writer.add_scalar('hm loss', hm_loss_meter.avg, global_step=nIters * (epoch-1) + i)
             writer.add_scalar('paf loss', paf_loss_meter.avg, global_step=nIters * (epoch-1) + i)
     return hm_loss_meter.avg, paf_loss_meter.avg
 
