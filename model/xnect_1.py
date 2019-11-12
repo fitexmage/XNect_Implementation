@@ -68,7 +68,9 @@ class Stage_1_Model(nn.Module):
         self.conv_3d_7 = Conv_3x3(128, self.num_paf * 3, 3)
 
     def forward(self, x):
+        print("Ased")
         d_selecsls = self.selecsls(x)
+        print("Adfadf")
         d_2d_1 = self.conv_2d_1(d_selecsls)
         d_2d_2 = self.deconv_2d_2(d_2d_1)
         d_2d_3 = self.conv_2d_3(d_2d_2)
