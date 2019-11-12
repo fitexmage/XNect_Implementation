@@ -1,10 +1,12 @@
 import torch
 import os
+
+from tensorboardX import SummaryWriter
 from tqdm import tqdm
 from visualization.visualize import visualize_output
 
 
-def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimizer=None, viz_output=False):
+def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimizer=None, viz_output=False, epoch=0, writer=None):
     if to_train:
         model.train()
     else:
@@ -54,14 +56,17 @@ def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimi
             paf_loss_meter.update(loss_paf_total.data.cpu().numpy())
             t.set_postfix(loss_hm='{:05.3f}'.format(hm_loss_meter.avg), loss_paf='{:05.3f}'.format(paf_loss_meter.avg))
             t.update()
+            writer.add_scalar('hm loss', hm_loss_meter.avg, global_step=nIters*epoch+i)
+            writer.add_scalar('paf loss', paf_loss_meter.avg, global_step=nIters * epoch + i)
     return hm_loss_meter.avg, paf_loss_meter.avg
 
 
 def train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, optimizer,
               n_epochs, val_interval, learn_rate, drop_lr, save_dir, viz_output=False):
     heatmap_loss_avg, paf_loss_avg = 0.0, 0.0
+    writer = SummaryWriter()
     for epoch in range(1, n_epochs + 1):
-        heatmap_loss_avg, paf_loss_avg = step(train_loader, model, criterion_hm, criterion_paf, True, optimizer, viz_output=viz_output)
+        heatmap_loss_avg, paf_loss_avg = step(train_loader, model, criterion_hm, criterion_paf, True, optimizer, viz_output=viz_output, epoch=epoch, writer=writer)
         print("Epoch: ", epoch)
         print("Training Heatmap Loss: ", heatmap_loss_avg)
         print("Training PAF Loss: ", paf_loss_avg)
