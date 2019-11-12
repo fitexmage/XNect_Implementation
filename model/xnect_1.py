@@ -12,9 +12,9 @@ class Conv_1x1(nn.Module):
 
     def forward(self, x):
         device = torch.device("cuda:0")
-        conv = nn.Conv2d(self.inp, self.oup, self.kernel, padding=0).to(device)(x)
-        bn = nn.BatchNorm2d(self.oup).to(device)(conv)
-        relu = nn.ReLU(inplace=True).to(device)(bn)
+        conv = nn.Conv2d(self.inp, self.oup, self.kernel, padding=0)(x)
+        bn = nn.BatchNorm2d(self.oup)(conv)
+        relu = nn.ReLU(inplace=True)(bn)
         return relu
 
 class Conv_3x3(nn.Module):
