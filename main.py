@@ -5,7 +5,7 @@ from opts.base_opts import Opts
 from data_process.data_loader_provider import create_data_loaders
 from model.model_provider import create_model, create_optimizer
 from training.train_net import train_net, validate_net
-
+from evaluation.eval_net import eval_net
 
 def main():
     # Seed all sources of randomness to 0 for reproducibility
@@ -37,11 +37,12 @@ def main():
     visualize_out = opt.vizOut
 
     # train/ test
-    train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, optimizer, n_epochs,
-              val_interval, learn_rate, drop_lr, opt.saveDir, visualize_out)
+    # train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, optimizer, n_epochs,
+    #           val_interval, learn_rate, drop_lr, opt.saveDir, visualize_out)
 
     # validate_net(test_loader, model, criterion_hm, criterion_paf, viz_output=visualize_out)
 
+    eval_net(train_loader, model, opt)
 
 if __name__ == '__main__':
     main()
