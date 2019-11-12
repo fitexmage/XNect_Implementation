@@ -3,7 +3,8 @@ import torch.nn as nn
 
 from model import selecsls
 
-device = torch.device("cuda:0")
+# device = torch.device("cuda:0")
+device = torch.device("cpu")
 
 class Conv_1x1(nn.Module):
     def __init__(self, inp, oup, kernel):
