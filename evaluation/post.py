@@ -192,7 +192,6 @@ def find_connected_joints(param, paf_upsamp, joint_list_per_joint_type, num_inte
             limb_intermed_coords[2, :] = 2*limb_type
             # And the y-coord paf index
             limb_intermed_coords[3, :] = 2*limb_type + 1
-            print(len(joints_src))
             for i, joint_src in enumerate(joints_src):
                 # Try every possible joints_src[i]-joints_dst[j] pair and see
                 # if it's a feasible limb
@@ -408,7 +407,7 @@ def decode_pose(img_orig, param, heatmaps, pafs):
     # [1]=neck...)
     joint_list_per_joint_type = NMS(param,
                                     heatmaps, img_orig.shape[0] / float(heatmaps.shape[0]))
-    print(len(joint_list_per_joint_type))
+
     # joint_list is an unravel'd version of joint_list_per_joint, where we add
     # a 5th column to indicate the joint_type (0=nose, 1=neck...)
     joint_list = np.array([tuple(peak) + (joint_type,) for joint_type,

@@ -37,12 +37,10 @@ def main():
     visualize_out = opt.vizOut
 
     # train/ test
-    # train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, optimizer, n_epochs,
-    #           val_interval, learn_rate, drop_lr, opt.saveDir, visualize_out)
+    train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, optimizer, n_epochs,
+              val_interval, learn_rate, drop_lr, opt.saveDir, visualize_out)
 
     # validate_net(test_loader, model, criterion_hm, criterion_paf, viz_output=visualize_out)
-
-    eval_net(train_loader, model, opt)
 
 if __name__ == '__main__':
     main()
