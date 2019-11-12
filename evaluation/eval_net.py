@@ -45,6 +45,9 @@ def eval_net(data_loader, model, opts):
             for j in range(0, n_imgs):
                 imgs_torch = torch.from_numpy(imgs_np[j:j+1]).float().cuda()
                 heatmaps, pafs = model(imgs_torch)
+                print(type(heatmaps))
+                print(heatmaps.shape)
+                print(heatmaps[-1].data.cpu().numpy().shape)
                 heatmap = heatmaps[-1].data.cpu().numpy()[0, :, :heights[j]//8, :widths[j]//8]
                 paf = pafs[-1].data.cpu().numpy()[0, :, :heights[j]//8, :widths[j]//8]
                 heatmap = resize_hm(heatmap, (widths[0], heights[0]))
