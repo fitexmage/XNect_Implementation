@@ -3,6 +3,8 @@ import torch.nn as nn
 
 from model import selecsls
 
+device = torch.device("cuda:0")
+
 class Conv_1x1(nn.Module):
     def __init__(self, inp, oup, kernel):
         super(Conv_1x1, self).__init__()
@@ -11,7 +13,6 @@ class Conv_1x1(nn.Module):
         self.kernel = kernel
 
     def forward(self, x):
-        device = torch.device("cuda:0")
         conv = nn.Conv2d(self.inp, self.oup, self.kernel, padding=0).to(device)(x)
         bn = nn.BatchNorm2d(self.oup).to(device)(conv)
         relu = nn.ReLU(inplace=True).to(device)(bn)
@@ -25,7 +26,6 @@ class Conv_3x3(nn.Module):
         self.kernel = kernel
 
     def forward(self, x):
-        device = torch.device("cuda:0")
         conv = nn.Conv2d(self.inp, self.oup, self.kernel, padding=1).to(device)(x)
         bn = nn.BatchNorm2d(self.oup).to(device)(conv)
         relu = nn.ReLU(inplace=True).to(device)(bn)
@@ -42,7 +42,7 @@ class Deconv(nn.Module):
         self.groups = groups
 
     def forward(self, x):
-        device = torch.device("cuda:0")
+
         deconv = nn.ConvTranspose2d(self.inp, self.oup, self.kernel, self.stride, padding=1, groups=self.groups).to(device)(x)
         bn = nn.BatchNorm2d(self.oup).to(device)(deconv)
         relu = nn.ReLU(inplace=True).to(device)(bn)
@@ -50,11 +50,12 @@ class Deconv(nn.Module):
 
 
 class Stage_1_Model(nn.Module):
-    def __init__(self, num_joints, num_paf, only_2d):
+    def __init__(self, num_joints, num_paf, only_2d, device):
         super(Stage_1_Model, self).__init__()
         self.num_joints = num_joints
         self.num_paf = num_paf
         self.only_2d = only_2d
+        self.device = device
 
         self.selecsls = selecsls.Net(config='SelecSLS60')
         self.conv_2d_1 = Conv_1x1(416, 256, 1)
