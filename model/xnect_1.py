@@ -11,10 +11,7 @@ class Conv_1x1(nn.Module):
         self.kernel = kernel
 
     def forward(self, x):
-        c = nn.Conv2d(self.inp, self.oup, self.kernel, padding=0)
-        print(c.is_cuda)
-        print(x.is_cuda)
-        conv = c(x)
+        conv = nn.Conv2d(self.inp, self.oup, self.kernel, padding=0)(x)
         bn = nn.BatchNorm2d(self.oup)(conv)
         relu = nn.ReLU(inplace=True)(bn)
         return relu
@@ -57,7 +54,7 @@ class Stage_1_Model(nn.Module):
         self.only_2d = only_2d
 
         self.selecsls = selecsls.Net(config='SelecSLS60')
-        self.conv_2d_1 = Conv_1x1(416, 256, 1)
+        self.conv_2d_1 = Conv_1x1(416, 256, 1).cuda()
         self.deconv_2d_2 = Deconv(256, 192, 4, 2, 4)
         self.conv_2d_3 = Conv_3x3(192, 128, 3)
         self.conv_2d_4 = Conv_3x3(128, 96, 3)
