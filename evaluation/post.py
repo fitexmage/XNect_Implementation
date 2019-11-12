@@ -192,7 +192,7 @@ def find_connected_joints(param, paf_upsamp, joint_list_per_joint_type, num_inte
             limb_intermed_coords[2, :] = 2*limb_type
             # And the y-coord paf index
             limb_intermed_coords[3, :] = 2*limb_type + 1
-            print(len(joint_src))
+            print(len(joints_src))
             for i, joint_src in enumerate(joints_src):
                 # Try every possible joints_src[i]-joints_dst[j] pair and see
                 # if it's a feasible limb
