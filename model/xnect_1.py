@@ -53,9 +53,9 @@ class Stage_1_Model(nn.Module):
         self.num_paf = num_paf
         self.only_2d = only_2d
 
-        self.selecsls = selecsls.Net(config='SelecSLS60')
+        self.selecsls = selecsls.Net(config='SelecSLS60').cuda()
         self.conv_2d_1 = Conv_1x1(416, 256, 1).cuda()
-        self.deconv_2d_2 = Deconv(256, 192, 4, 2, 4)
+        self.deconv_2d_2 = Deconv(256, 192, 4, 2, 4).cuda()
         self.conv_2d_3 = Conv_3x3(192, 128, 3)
         self.conv_2d_4 = Conv_3x3(128, 96, 3)
         self.conv_2d_5 = Conv_3x3(96, self.num_joints + self.num_paf * 2, 3)
