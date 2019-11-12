@@ -82,7 +82,7 @@ def train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, opt
 def validate_net(test_loader, model, criterion_hm, criterion_paf, save_dir=None, epoch=0, viz_output=False):
     heatmap_loss_avg, paf_loss_avg = step(test_loader, model, criterion_hm, criterion_paf, False, viz_output=viz_output)
     if not save_dir is None:
-        torch.save(model.state_dict(), os.path.join(save_dir, 'model_{}.pth'.format(epoch)))
+        torch.save(model.state_dict(), os.path.join(save_dir, 'model', 'model_{}.pth'.format(epoch)))
     return heatmap_loss_avg, paf_loss_avg
 
 
