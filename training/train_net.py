@@ -28,17 +28,20 @@ def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimi
             heatmap_outputs, paf_outputs = model(input_cuda)
             loss_hm_total = 0
             loss_paf_total = 0
-            for i in range(len(heatmap_outputs)):
-                heatmap_out = heatmap_outputs[i]
-                paf_out = paf_outputs[i]
-                single_heatmap_t_cuda = heatmap_t_cuda[i]
-                single_paf_t_cuda = paf_t_cuda[i]
-                # print("out:", heatmap_out.shape)
-                # print("raw:", heatmap.shape)
-                # print("mask:", allow_mask.shape)
-                # print(input_.shape)
-                loss_hm_total += criterion_hm(heatmap_out * allow_mask, single_heatmap_t_cuda * allow_mask)/allow_mask.sum().detach()/heatmap.shape[0]/heatmap.shape[1]
-                loss_paf_total += criterion_paf(paf_out * allow_mask, single_paf_t_cuda * allow_mask)/allow_mask.sum().detach()/heatmap.shape[0]/paf.shape[1]
+            # for i in range(len(heatmap_outputs)):
+            #     heatmap_out = heatmap_outputs[i]
+            #     paf_out = paf_outputs[i]
+            #     single_heatmap_t_cuda = heatmap_t_cuda[i]
+            #     single_paf_t_cuda = paf_t_cuda[i]
+            #     # print("out:", heatmap_out.shape)
+            #     # print("raw:", heatmap.shape)
+            #     # print("mask:", allow_mask.shape)
+            #     # print(input_.shape)
+            #     loss_hm_total += criterion_hm(heatmap_out * allow_mask, single_heatmap_t_cuda * allow_mask)/allow_mask.sum().detach()/heatmap.shape[0]/heatmap.shape[1]
+            #     loss_paf_total += criterion_paf(paf_out * allow_mask, single_paf_t_cuda * allow_mask)/allow_mask.sum().detach()/heatmap.shape[0]/paf.shape[1]
+            loss_hm_total += criterion_hm(heatmap_outputs * allow_mask, heatmap_t_cuda * allow_mask)/allow_mask.sum().detach()/heatmap.shape[0]/heatmap.shape[1]
+            loss_paf_total += criterion_paf(paf_outputs * allow_mask, paf_t_cuda * allow_mask)/allow_mask.sum().detach()/heatmap.shape[0]/paf.shape[1]
+
             loss = loss_hm_total + loss_paf_total
             output = (heatmap_outputs[-1].data.cpu().numpy(), paf_outputs[-1].data.cpu().numpy(), indices.numpy())
             if to_train:
