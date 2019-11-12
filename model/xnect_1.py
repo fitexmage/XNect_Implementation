@@ -11,7 +11,10 @@ class Conv_1x1(nn.Module):
         self.kernel = kernel
 
     def forward(self, x):
-        conv = nn.Conv2d(self.inp, self.oup, self.kernel, padding=0)(x)
+        c = nn.Conv2d(self.inp, self.oup, self.kernel, padding=0)
+        print(c.is_cuda)
+        print(x.is_cuda)
+        conv = c(x)
         bn = nn.BatchNorm2d(self.oup)(conv)
         relu = nn.ReLU(inplace=True)(bn)
         return relu
@@ -68,9 +71,7 @@ class Stage_1_Model(nn.Module):
         self.conv_3d_7 = Conv_3x3(128, self.num_paf * 3, 3)
 
     def forward(self, x):
-        print(next(self.parameters()).is_cuda)
         d_selecsls = self.selecsls(x)
-        print(next(self.parameters()).is_cuda)
         d_2d_1 = self.conv_2d_1(d_selecsls)
         d_2d_2 = self.deconv_2d_2(d_2d_1)
         d_2d_3 = self.conv_2d_3(d_2d_2)
