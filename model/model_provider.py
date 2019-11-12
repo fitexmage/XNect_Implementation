@@ -19,6 +19,7 @@ def create_model(opt):
     model = Stage_1_Model(num_joints=19, num_paf=17, only_2d=True)
     if os.path.exists(opt.saveDir):
         model.load_state_dict(torch.load(os.path.join(opt.saveDir, 'model_{}.pth'.format(1))))
+        print("Successfully load the model!")
     else:
         model.load_state_dict(torch.load('../save/SelecSLS60_statedict.pth'), strict=False)
     criterion_hm = parse_criterion(opt.criterionHm)
