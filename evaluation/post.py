@@ -408,7 +408,7 @@ def decode_pose(img_orig, param, heatmaps, pafs):
     # [1]=neck...)
     joint_list_per_joint_type = NMS(param,
                                     heatmaps, img_orig.shape[0] / float(heatmaps.shape[0]))
-
+    print(len(joint_list_per_joint_type))
     # joint_list is an unravel'd version of joint_list_per_joint, where we add
     # a 5th column to indicate the joint_type (0=nose, 1=neck...)
     joint_list = np.array([tuple(peak) + (joint_type,) for joint_type,
