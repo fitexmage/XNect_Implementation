@@ -50,12 +50,11 @@ class Deconv(nn.Module):
 
 
 class Stage_1_Model(nn.Module):
-    def __init__(self, num_joints, num_paf, only_2d, device):
+    def __init__(self, num_joints, num_paf, only_2d):
         super(Stage_1_Model, self).__init__()
         self.num_joints = num_joints
         self.num_paf = num_paf
         self.only_2d = only_2d
-        self.device = device
 
         self.selecsls = selecsls.Net(config='SelecSLS60')
         self.conv_2d_1 = Conv_1x1(416, 256, 1)
