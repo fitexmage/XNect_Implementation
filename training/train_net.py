@@ -66,7 +66,7 @@ def train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, opt
         print("Training Heatmap Loss: ", heatmap_loss_avg)
         print("Training PAF Loss: ", paf_loss_avg)
         if epoch % val_interval == 0:
-            heatmap_loss_avg, paf_loss_avg = validate_net(test_loader, model, criterion_hm, criterion_paf, save_dir, epoch, viz_output=viz_output, writer=writer)
+            heatmap_loss_avg, paf_loss_avg = validate_net(test_loader, model, criterion_hm, criterion_paf, save_dir, epoch, viz_output=viz_output)
             print("Validation Heatmap Loss: ", heatmap_loss_avg)
             print("Validation PAF Loss: ", paf_loss_avg)
             print()
