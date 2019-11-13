@@ -15,12 +15,6 @@ def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimi
     hm_loss_meter, paf_loss_meter = AverageMeter(), AverageMeter()
     with tqdm(total=nIters) as t:
         for i, (input_, heatmap, paf, ignore_mask, indices) in enumerate(data_loader):
-            # input_cuda = input_.float()
-            # heatmap_t_cuda = heatmap.float()
-            # paf_t_cuda = paf.float()
-            # ignore_mask_cuda = ignore_mask.reshape(ignore_mask.shape[0], 1,
-            #                                        ignore_mask.shape[1], ignore_mask.shape[2]).float()
-
             input_cuda = input_.float().cuda()
             heatmap_t_cuda = heatmap.float().cuda()
             paf_t_cuda = paf.float().cuda()
@@ -57,11 +51,8 @@ def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimi
             t.set_postfix(loss_hm='{:05.3f}'.format(hm_loss_meter.avg), loss_paf='{:05.3f}'.format(paf_loss_meter.avg))
             t.update()
             if to_train:
-                writer.add_scalar('hm loss', hm_loss_meter.avg, global_step=nIters * (epoch-1) + i)
-                writer.add_scalar('paf loss', paf_loss_meter.avg, global_step=nIters * (epoch-1) + i)
-            else:
-                writer.add_scalar('validation hm loss', hm_loss_meter.avg, global_step=nIters * (epoch - 1) + i)
-                writer.add_scalar('validation paf loss', paf_loss_meter.avg, global_step=nIters * (epoch - 1) + i)
+                writer.add_scalar('hm loss', hm_loss_meter.avg, global_step=nIters * (epoch - 1) + i)
+                writer.add_scalar('paf loss', paf_loss_meter.avg, global_step=nIters * (epoch - 1) + i)
     return hm_loss_meter.avg, paf_loss_meter.avg
 
 
@@ -79,12 +70,14 @@ def train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, opt
             print("Validation Heatmap Loss: ", heatmap_loss_avg)
             print("Validation PAF Loss: ", paf_loss_avg)
             print()
+            writer.add_scalar('validation hm loss', heatmap_loss_avg, global_step=epoch)
+            writer.add_scalar('validation paf loss', paf_loss_avg, global_step=epoch)
         adjust_learning_rate(optimizer, epoch, drop_lr, learn_rate)
     return heatmap_loss_avg, paf_loss_avg
 
 
-def validate_net(test_loader, model, criterion_hm, criterion_paf, save_dir=None, epoch=0, viz_output=False, writer=None):
-    heatmap_loss_avg, paf_loss_avg = step(test_loader, model, criterion_hm, criterion_paf, False, viz_output=viz_output, epoch=epoch, writer=writer)
+def validate_net(test_loader, model, criterion_hm, criterion_paf, save_dir=None, epoch=0, viz_output=False):
+    heatmap_loss_avg, paf_loss_avg = step(test_loader, model, criterion_hm, criterion_paf, False, viz_output=viz_output)
     if not save_dir is None:
         torch.save(model.state_dict(), os.path.join(save_dir, 'model', 'model_{}.pth'.format(epoch)))
     return heatmap_loss_avg, paf_loss_avg
