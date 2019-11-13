@@ -68,8 +68,8 @@ def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimi
 def train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, optimizer,
               n_epochs, val_interval, learn_rate, drop_lr, save_dir, viz_output=False):
     heatmap_loss_avg, paf_loss_avg = 0.0, 0.0
-    writer = SummaryWriter(os.path.join(save_dir, 'runs'))
     for epoch in range(1, n_epochs + 1):
+        writer = SummaryWriter(os.path.join(save_dir, 'runs'))
         heatmap_loss_avg, paf_loss_avg = step(train_loader, model, criterion_hm, criterion_paf, True, optimizer, viz_output=viz_output, epoch=epoch, writer=writer)
         print("Epoch: ", epoch)
         print("Training Heatmap Loss: ", heatmap_loss_avg)
@@ -84,7 +84,7 @@ def train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, opt
 
 
 def validate_net(test_loader, model, criterion_hm, criterion_paf, save_dir=None, epoch=0, viz_output=False, writer=None):
-    heatmap_loss_avg, paf_loss_avg = step(test_loader, model, criterion_hm, criterion_paf, False, viz_output=viz_output, writer=writer)
+    heatmap_loss_avg, paf_loss_avg = step(test_loader, model, criterion_hm, criterion_paf, False, viz_output=viz_output, epoch=epoch, writer=writer)
     if not save_dir is None:
         torch.save(model.state_dict(), os.path.join(save_dir, 'model', 'model_{}.pth'.format(epoch)))
     return heatmap_loss_avg, paf_loss_avg
