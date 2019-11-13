@@ -17,7 +17,7 @@ def parse_criterion(criterion):
 
 def create_model(opt):
     model = Stage_1_Model(num_joints=19, num_paf=17, only_2d=True)
-    if len(os.listdir(opt.saveDir)) > 1:
+    if len(os.listdir(os.path.join(opt.saveDir, 'model'))) > 0:
         model.load_state_dict(torch.load(os.path.join(opt.saveDir, 'model_{}.pth'.format(7))))
         print("Successfully load the model!")
     else:
