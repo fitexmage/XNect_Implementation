@@ -56,8 +56,12 @@ def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimi
             paf_loss_meter.update(loss_paf_total.data.cpu().numpy())
             t.set_postfix(loss_hm='{:05.3f}'.format(hm_loss_meter.avg), loss_paf='{:05.3f}'.format(paf_loss_meter.avg))
             t.update()
-            writer.add_scalar('hm loss', hm_loss_meter.avg, global_step=nIters * (epoch-1) + i)
-            writer.add_scalar('paf loss', paf_loss_meter.avg, global_step=nIters * (epoch-1) + i)
+            if to_train:
+                writer.add_scalar('hm loss', hm_loss_meter.avg, global_step=nIters * (epoch-1) + i)
+                writer.add_scalar('paf loss', paf_loss_meter.avg, global_step=nIters * (epoch-1) + i)
+            else:
+                writer.add_scalar('validation hm loss', hm_loss_meter.avg, global_step=nIters * (epoch - 1) + i)
+                writer.add_scalar('validation paf loss', paf_loss_meter.avg, global_step=nIters * (epoch - 1) + i)
     return hm_loss_meter.avg, paf_loss_meter.avg
 
 
@@ -71,7 +75,7 @@ def train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, opt
         print("Training Heatmap Loss: ", heatmap_loss_avg)
         print("Training PAF Loss: ", paf_loss_avg)
         if epoch % val_interval == 0:
-            heatmap_loss_avg, paf_loss_avg = validate_net(test_loader, model, criterion_hm, criterion_paf, save_dir, epoch, viz_output=viz_output)
+            heatmap_loss_avg, paf_loss_avg = validate_net(test_loader, model, criterion_hm, criterion_paf, save_dir, epoch, viz_output=viz_output, writer=writer)
             print("Validation Heatmap Loss: ", heatmap_loss_avg)
             print("Validation PAF Loss: ", paf_loss_avg)
             print()
@@ -79,8 +83,8 @@ def train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, opt
     return heatmap_loss_avg, paf_loss_avg
 
 
-def validate_net(test_loader, model, criterion_hm, criterion_paf, save_dir=None, epoch=0, viz_output=False):
-    heatmap_loss_avg, paf_loss_avg = step(test_loader, model, criterion_hm, criterion_paf, False, viz_output=viz_output)
+def validate_net(test_loader, model, criterion_hm, criterion_paf, save_dir=None, epoch=0, viz_output=False, writer=None):
+    heatmap_loss_avg, paf_loss_avg = step(test_loader, model, criterion_hm, criterion_paf, False, viz_output=viz_output, writer=writer)
     if not save_dir is None:
         torch.save(model.state_dict(), os.path.join(save_dir, 'model', 'model_{}.pth'.format(epoch)))
     return heatmap_loss_avg, paf_loss_avg
