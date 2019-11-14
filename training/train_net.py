@@ -6,7 +6,7 @@ from tqdm import tqdm
 from visualization.visualize import visualize_output
 
 
-def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimizer=None, viz_output=False, epoch=0, writer=None, latest_inx=0):
+def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimizer=None, viz_output=False, epoch=0, writer=None):
     if to_train:
         model.train()
     else:
@@ -45,7 +45,7 @@ def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimi
             t.set_postfix(loss_hm='{:05.3f}'.format(hm_loss_meter.avg), loss_paf='{:05.3f}'.format(paf_loss_meter.avg))
             t.update()
             if to_train:
-                writer.add_scalar('hm loss', hm_loss_meter.avg, global_step=nIters * (latest_inx + epoch - 1) + i)
+                writer.add_scalar('hm loss', hm_loss_meter.avg, global_step=nIters * (epoch - 1) + i)
                 writer.add_scalar('paf loss', paf_loss_meter.avg, global_step=nIters * (epoch - 1) + i)
     return hm_loss_meter.avg, paf_loss_meter.avg
 
@@ -53,9 +53,9 @@ def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimi
 def train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, optimizer,
               n_epochs, val_interval, learn_rate, drop_lr, save_dir, viz_output=False, latest_inx=0):
     heatmap_loss_avg, paf_loss_avg = 0.0, 0.0
-    for epoch in range(1, n_epochs + 1):
+    for epoch in range(latest_inx + 1, n_epochs + 1):
         writer = SummaryWriter(os.path.join(save_dir, 'runs'))
-        heatmap_loss_avg, paf_loss_avg = step(train_loader, model, criterion_hm, criterion_paf, True, optimizer, viz_output=viz_output, epoch=epoch, writer=writer, latest_inx=latest_inx)
+        heatmap_loss_avg, paf_loss_avg = step(train_loader, model, criterion_hm, criterion_paf, True, optimizer, viz_output=viz_output, epoch=epoch, writer=writer)
         print("Epoch: ", epoch)
         print("Training Heatmap Loss: ", heatmap_loss_avg)
         print("Training PAF Loss: ", paf_loss_avg)
@@ -64,8 +64,8 @@ def train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, opt
             print("Validation Heatmap Loss: ", heatmap_loss_avg)
             print("Validation PAF Loss: ", paf_loss_avg)
             print()
-            writer.add_scalar('validation hm loss', heatmap_loss_avg, global_step=latest_inx+epoch)
-            writer.add_scalar('validation paf loss', paf_loss_avg, global_step=latest_inx+epoch)
+            writer.add_scalar('validation hm loss', heatmap_loss_avg, global_step=epoch)
+            writer.add_scalar('validation paf loss', paf_loss_avg, global_step=epoch)
         adjust_learning_rate(optimizer, epoch, drop_lr, learn_rate)
     return heatmap_loss_avg, paf_loss_avg
 
