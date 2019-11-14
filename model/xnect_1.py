@@ -3,7 +3,7 @@ import torch.nn as nn
 
 from model import selecsls
 
-device = torch.device("cuda:0")
+# device = torch.device("cuda:0")
 # device = torch.device("cpu")
 
 class Conv_1x1(nn.Module):
@@ -14,9 +14,9 @@ class Conv_1x1(nn.Module):
         self.kernel = kernel
 
     def forward(self, x):
-        conv = nn.Conv2d(self.inp, self.oup, self.kernel, padding=0).to(device)(x)
-        bn = nn.BatchNorm2d(self.oup).to(device)(conv)
-        relu = nn.ReLU(inplace=True).to(device)(bn)
+        conv = nn.Conv2d(self.inp, self.oup, self.kernel, padding=0)(x)
+        bn = nn.BatchNorm2d(self.oup)(conv)
+        relu = nn.ReLU(inplace=True)(bn)
         return relu
 
 class Conv_3x3(nn.Module):
@@ -27,9 +27,9 @@ class Conv_3x3(nn.Module):
         self.kernel = kernel
 
     def forward(self, x):
-        conv = nn.Conv2d(self.inp, self.oup, self.kernel, padding=1).to(device)(x)
-        bn = nn.BatchNorm2d(self.oup).to(device)(conv)
-        relu = nn.ReLU(inplace=True).to(device)(bn)
+        conv = nn.Conv2d(self.inp, self.oup, self.kernel, padding=1)(x)
+        bn = nn.BatchNorm2d(self.oup)(conv)
+        relu = nn.ReLU(inplace=True)(bn)
         return relu
 
 
@@ -44,9 +44,9 @@ class Deconv(nn.Module):
 
     def forward(self, x):
 
-        deconv = nn.ConvTranspose2d(self.inp, self.oup, self.kernel, self.stride, padding=1, groups=self.groups).to(device)(x)
-        bn = nn.BatchNorm2d(self.oup).to(device)(deconv)
-        relu = nn.ReLU(inplace=True).to(device)(bn)
+        deconv = nn.ConvTranspose2d(self.inp, self.oup, self.kernel, self.stride, padding=1, groups=self.groups)(x)
+        bn = nn.BatchNorm2d(self.oup)(deconv)
+        relu = nn.ReLU(inplace=True)(bn)
         return relu
 
 

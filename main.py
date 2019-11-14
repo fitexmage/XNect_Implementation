@@ -22,6 +22,8 @@ def main():
     # Create nn
     model, criterion_hm, criterion_paf = create_model(opt)
     model = model.cuda()
+    device = torch.device("cuda:0")
+    model = model.to(device)
     criterion_hm = criterion_hm.cuda()
     criterion_paf = criterion_paf.cuda()
 
