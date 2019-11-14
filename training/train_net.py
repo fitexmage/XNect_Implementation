@@ -15,17 +15,11 @@ def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimi
     hm_loss_meter, paf_loss_meter = AverageMeter(), AverageMeter()
     with tqdm(total=nIters) as t:
         for i, (input_, heatmap, paf, ignore_mask, indices) in enumerate(data_loader):
-            device = torch.device("cuda:0")
-            input_cuda = input_.float().to(device)
-            heatmap_t_cuda = heatmap.float().to(device)
-            paf_t_cuda = paf.float().to(device)
+            input_cuda = input_.float().cuda()
+            heatmap_t_cuda = heatmap.float().cuda()
+            paf_t_cuda = paf.float().cuda()
             ignore_mask_cuda = ignore_mask.reshape(ignore_mask.shape[0], 1,
-                                                   ignore_mask.shape[1], ignore_mask.shape[2]).float().to(device)
-            # input_cuda = input_.float().cuda()
-            # heatmap_t_cuda = heatmap.float().cuda()
-            # paf_t_cuda = paf.float().cuda()
-            # ignore_mask_cuda = ignore_mask.reshape(ignore_mask.shape[0], 1,
-            #                                        ignore_mask.shape[1], ignore_mask.shape[2]).float().cuda()
+                                                   ignore_mask.shape[1], ignore_mask.shape[2]).float().cuda()
             allow_mask = 1 - ignore_mask_cuda
             heatmap_outputs, paf_outputs = model(input_cuda)
             loss_hm_total = 0
