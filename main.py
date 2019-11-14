@@ -20,7 +20,7 @@ def main():
     train_loader, test_loader = create_data_loaders(opt)
 
     # Create nn
-    model, criterion_hm, criterion_paf = create_model(opt)
+    model, criterion_hm, criterion_paf, latest_inx = create_model(opt)
     model = model.cuda()
     criterion_hm = criterion_hm.cuda()
     criterion_paf = criterion_paf.cuda()
@@ -38,7 +38,7 @@ def main():
 
     # train/ test
     train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, optimizer, n_epochs,
-              val_interval, learn_rate, drop_lr, opt.saveDir, visualize_out)
+              val_interval, learn_rate, drop_lr, opt.saveDir, visualize_out, latest_inx)
 
     # validate_net(test_loader, model, criterion_hm, criterion_paf, viz_output=visualize_out)
 
