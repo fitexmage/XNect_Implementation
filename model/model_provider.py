@@ -28,7 +28,7 @@ def find_latest_file(dir):
 
 
 def create_model(opt):
-    model = Stage_1_Model(num_joints=19, num_paf=17, only_2d=True)
+    model = Stage_1_Model(num_joints=19, only_2d=True)
     if len(os.listdir(os.path.join(opt.saveDir, 'model'))) > 0:
         latest_file, latest_inx = find_latest_file(os.path.join(opt.saveDir, 'model'))
         model.load_state_dict(torch.load(latest_file))
