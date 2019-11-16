@@ -45,7 +45,7 @@ def get_heatmap(coco, img, keypoints, sigma):
             keypoint = keypoints_person[i]
             # Ignore unannotated keypoints
             if keypoint[2] > 0:
-                out_map[i] = np.maximum(out_map[i], DrawGaussian(out_map[i], keypoint[0:2], sigma=sigma))
+                out_map[i] = np.maximum(out_map[i].copy(), DrawGaussian(out_map[i], keypoint[0:2], sigma=sigma))
     out_map[n_joints] = 1 - np.sum(out_map[0:n_joints], axis=0) # Last heatmap is background
     return out_map
 
