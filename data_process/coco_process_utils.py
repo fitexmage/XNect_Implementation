@@ -25,7 +25,9 @@ BODY_PARTS = [
     (12,14), # right waise - right knee
     (13,15), # left knee - left foot
     (14,16), # right knee - right foot
-    (0,17)   # nose - neck
+    (0,17),  # nose - neck
+    (5,3),   # left shoulder - left ear
+    (6,4)    # right shoulder - right ear
 ]
 
 FLIP_INDICES = [(1,2), (3,4), (5,6), (7,8), (9,10), (11,12), (13,14), (15,16)]
