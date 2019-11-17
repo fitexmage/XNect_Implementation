@@ -45,10 +45,7 @@ def main():
     scales = [1., 0.5, 0.75, 1.25, 1.5, 2.0]
     assert (scales[0] == 1)
     n_scales = len(scales)
-    outputs = []
     dataset_len = 100  # len(dataset)
-    keypoints_list = []
-    runtimes = []
 
     with torch.no_grad():
         for i in range(dataset_len):
@@ -79,7 +76,7 @@ def main():
                 paf_avg_lst += [paf]
             heatmap_avg = sum(heatmap_avg_lst) / n_imgs
             paf_avg = sum(paf_avg_lst) / n_imgs
-            print(imgs_np.shape)
+            print(np.transpose(imgs_np[0], (1, 2, 0)).shape)
             print(heatmap_avg.shape)
             print(paf_avg.shape)
 
