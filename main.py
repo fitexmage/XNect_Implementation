@@ -76,7 +76,7 @@ def main():
                 paf_avg_lst += [paf]
             heatmap_avg = sum(heatmap_avg_lst) / n_imgs
             paf_avg = sum(paf_avg_lst) / n_imgs
-            print(np.transpose(imgs_np[0], (1, 2, 0)).shape)
+            print(np.transpose(img_basic, (1, 2, 0)).shape)
             print(heatmap_avg.shape)
             print(paf_avg.shape)
 
