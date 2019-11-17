@@ -77,9 +77,9 @@ def main():
             heatmap_avg = sum(heatmap_avg_lst) / n_imgs
             paf_avg = sum(paf_avg_lst) / n_imgs
             import cv2
-            cv2.imwrite("img.jpg", np.transpose(img_basic, (1, 2, 0)).shape)
+            cv2.imwrite("img.jpg", np.transpose(img_basic, (1, 2, 0)))
             for i in range(19):
-                cv2.imwrite("hm_" + str(i) + ".jpg", heatmap_avg)
+                cv2.imwrite("hm_" + str(i) + ".jpg", heatmap_avg[i])
             break
 
     # validate_net(test_loader, model, criterion_hm, criterion_paf, viz_output=visualize_out)
