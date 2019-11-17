@@ -56,9 +56,9 @@ def train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, opt
     heatmap_loss_avg, paf_loss_avg = 0.0, 0.0
     for epoch in range(latest_inx + 1, n_epochs + 1):
         writer = SummaryWriter(os.path.join(save_dir, 'runs'))
+        print("Epoch: ", epoch)
         adjust_learning_rate(optimizer, epoch, drop_lr, learn_rate)
         heatmap_loss_avg, paf_loss_avg = step(train_loader, model, criterion_hm, criterion_paf, True, optimizer, viz_output=viz_output, epoch=epoch, writer=writer)
-        print("Epoch: ", epoch)
         print("Training Heatmap Loss: ", heatmap_loss_avg)
         print("Training PAF Loss: ", paf_loss_avg)
         if epoch % val_interval == 0:
@@ -98,6 +98,7 @@ class AverageMeter(object):
 
 
 def adjust_learning_rate(optimizer, epoch, dropLR, LR):
-    lr = LR * (0.1 ** (epoch // dropLR))
+    lr = LR * (0.4 ** (epoch // dropLR))
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
+    print("Learning Rate:", lr)
