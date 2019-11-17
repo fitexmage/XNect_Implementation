@@ -20,6 +20,7 @@ def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimi
             paf_t_cuda = paf.float().cuda()
             ignore_mask_cuda = ignore_mask.reshape(ignore_mask.shape[0], 1,
                                                    ignore_mask.shape[1], ignore_mask.shape[2]).float().cuda()
+
             allow_mask = 1 - ignore_mask_cuda
             heatmap_outputs, paf_outputs = model(input_cuda)
             loss_hm_total = 0

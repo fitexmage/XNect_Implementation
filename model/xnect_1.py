@@ -4,14 +4,15 @@ import torch.nn as nn
 from model import selecsls
 
 class Conv(nn.Module):
-    def __init__(self, inp, oup, kernel):
+    def __init__(self, inp, oup, kernel, padding):
         super(Conv, self).__init__()
         self.inp = inp
         self.oup = oup
         self.kernel = kernel
+        self.padding = padding
 
     def forward(self, x):
-        conv = nn.Conv2d(self.inp, self.oup, self.kernel, padding=1).cuda()(x)
+        conv = nn.Conv2d(self.inp, self.oup, self.kernel, padding=self.padding).cuda()(x)
         bn = nn.BatchNorm2d(self.oup).cuda()(conv)
         relu = nn.ReLU(inplace=True).cuda()(bn)
         return relu
@@ -41,18 +42,18 @@ class Stage_1_Model(nn.Module):
         self.only_2d = only_2d
 
         self.selecsls = selecsls.Net(config='SelecSLS60')
-        self.conv_2d_1 = Conv(416, 256, 1)
+        self.conv_2d_1 = Conv(416, 256, 1, 0)
         self.deconv_2d_2 = Deconv(256, 192, 4, 2, 4)
-        self.conv_2d_3 = Conv(192, 128, 3)
-        self.conv_2d_4 = Conv(128, 96, 3)
-        self.conv_2d_5 = Conv(96, self.num_joints * 3, 3)
+        self.conv_2d_3 = Conv(192, 128, 3, 1)
+        self.conv_2d_4 = Conv(128, 96, 3, 1)
+        self.conv_2d_5 = Conv(96, self.num_joints * 3, 3, 1)
 
-        self.conv_3d_1 = Conv(416, 256, 1)
+        self.conv_3d_1 = Conv(416, 256, 1, 0)
         self.deconv_3d_2 = Deconv(256, 192, kernel=4, stride=2, groups=4)
-        self.conv_3d_3 = Conv(192, 160, 3)
-        self.conv_3d_5 = Conv(160, 160, 1)
-        self.conv_3d_6 = Conv(160, 128, 3)
-        self.conv_3d_7 = Conv(128, self.num_joints * 3, 3)
+        self.conv_3d_3 = Conv(192, 160, 3, 1)
+        self.conv_3d_5 = Conv(160, 160, 1, 1)
+        self.conv_3d_6 = Conv(160, 128, 3, 1)
+        self.conv_3d_7 = Conv(128, self.num_joints * 3, 3, 1)
 
     def forward(self, x):
         d_selecsls = self.selecsls(x)
