@@ -21,9 +21,9 @@ def main():
 
     # Create nn
     model, criterion_hm, criterion_paf, latest_inx = create_model(opt)
-    # model = model.cuda()
-    # criterion_hm = criterion_hm.cuda()
-    # criterion_paf = criterion_paf.cuda()
+    model = model.cuda()
+    criterion_hm = criterion_hm.cuda()
+    criterion_paf = criterion_paf.cuda()
 
     # Create optimizer
     optimizer = create_optimizer(opt, model)
