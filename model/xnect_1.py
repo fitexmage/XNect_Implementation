@@ -61,7 +61,7 @@ class Stage_1_Model(nn.Module):
         d_2d_3 = self.conv_2d_3(d_2d_2)
         d_2d_4 = self.conv_2d_4(d_2d_3)
         d_2d_5 = self.conv_2d_5(d_2d_4)
-        d_2d_6 = torch.split(d_2d_5, [self.num_joints, self.num_paf, self.num_paf], 1)
+        d_2d_6 = torch.split(d_2d_5, self.num_joints, 1)
         heatmap_2d_7 = d_2d_6[0]
         paf_2d_8 = torch.cat((d_2d_6[1], d_2d_6[2]), 1)
 
