@@ -77,7 +77,7 @@ def main():
             heatmap_avg = sum(heatmap_avg_lst) / n_imgs
             paf_avg = sum(paf_avg_lst) / n_imgs
             print(np.transpose(img_basic, (1, 2, 0)).shape)
-            print(heatmap_avg.shape)
+            print(heatmap_avg)
             print(paf_avg.shape)
 
     # validate_net(test_loader, model, criterion_hm, criterion_paf, viz_output=visualize_out)
