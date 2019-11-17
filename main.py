@@ -77,6 +77,7 @@ def main():
             heatmap_avg = sum(heatmap_avg_lst) / n_imgs
             paf_avg = sum(paf_avg_lst) / n_imgs
             import cv2
+            print(np.transpose(img_basic, (1, 2, 0)))
             cv2.imwrite("img.jpg", np.transpose(img_basic, (1, 2, 0)))
             for i in range(19):
                 cv2.imwrite("hm_" + str(i) + ".jpg", heatmap_avg[i])
