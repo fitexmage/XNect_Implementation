@@ -69,9 +69,6 @@ class CocoDataSet(data.Dataset):
             width, height = img.shape[1], img.shape[0]
             new_width, new_height = int(scale* width), int(scale*height)
             scaled_img = cv2.resize(img.copy(), (new_width, new_height))
-            print(scaled_img.shape)
-            if(scaled_img.shape[0] == 426):
-                print(scaled_img)
             flip_img = cv2.flip(scaled_img, 1)
             scaled_img = normalize(scaled_img)
             imgs.append(scaled_img)

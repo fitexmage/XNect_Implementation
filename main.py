@@ -21,9 +21,9 @@ def main():
 
     # Create nn
     model, criterion_hm, criterion_paf, latest_inx = create_model(opt)
-    model = model.cuda()
-    criterion_hm = criterion_hm.cuda()
-    criterion_paf = criterion_paf.cuda()
+    # model = model.cuda()
+    # criterion_hm = criterion_hm.cuda()
+    # criterion_paf = criterion_paf.cuda()
 
     # Create optimizer
     optimizer = create_optimizer(opt, model)
@@ -77,7 +77,8 @@ def main():
             heatmap_avg = sum(heatmap_avg_lst) / n_imgs * 255
             paf_avg = sum(paf_avg_lst) / n_imgs
             import cv2
-            cv2.imwrite("img.jpg", np.transpose(img_basic, (1, 2, 0)))
+            img, heat_map, paf, ignore_mask, keypoints = dataset.get_item_raw(i, False)
+            cv2.imwrite("img.jpg", img)
             for i in range(19):
                 cv2.imwrite("hm_" + str(i) + ".jpg", heatmap_avg[i])
             break
