@@ -56,6 +56,7 @@ def train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, opt
     heatmap_loss_avg, paf_loss_avg = 0.0, 0.0
     for epoch in range(latest_inx + 1, n_epochs + 1):
         writer = SummaryWriter(os.path.join(save_dir, 'runs'))
+        adjust_learning_rate(optimizer, epoch, drop_lr, learn_rate)
         heatmap_loss_avg, paf_loss_avg = step(train_loader, model, criterion_hm, criterion_paf, True, optimizer, viz_output=viz_output, epoch=epoch, writer=writer)
         print("Epoch: ", epoch)
         print("Training Heatmap Loss: ", heatmap_loss_avg)
@@ -67,7 +68,6 @@ def train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, opt
             print()
             writer.add_scalar('validation hm loss', heatmap_loss_avg, global_step=epoch)
             writer.add_scalar('validation paf loss', paf_loss_avg, global_step=epoch)
-        adjust_learning_rate(optimizer, epoch, drop_lr, learn_rate)
     return heatmap_loss_avg, paf_loss_avg
 
 
