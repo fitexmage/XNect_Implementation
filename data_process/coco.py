@@ -69,6 +69,7 @@ class CocoDataSet(data.Dataset):
             width, height = img.shape[1], img.shape[0]
             new_width, new_height = int(scale* width), int(scale*height)
             scaled_img = cv2.resize(img.copy(), (new_width, new_height))
+            print(scaled_img.shape)
             flip_img = cv2.flip(scaled_img, 1)
             scaled_img = normalize(scaled_img)
             imgs.append(scaled_img)
@@ -77,7 +78,6 @@ class CocoDataSet(data.Dataset):
         paf = paf.transpose(2, 3, 0, 1)
         paf = paf.reshape(paf.shape[0], paf.shape[1], paf.shape[2] * paf.shape[3])
         paf = paf.transpose(2, 0, 1)
-        print(imgs[0])
         return imgs, heat_map, paf, ignore_mask, keypoints
 
     def __len__(self):
