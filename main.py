@@ -21,9 +21,9 @@ def main():
 
     # Create nn
     model, criterion_hm, criterion_paf, latest_inx = create_model(opt)
-    # model = model.cuda()
-    # criterion_hm = criterion_hm.cuda()
-    # criterion_paf = criterion_paf.cuda()
+    model = model.cuda()
+    criterion_hm = criterion_hm.cuda()
+    criterion_paf = criterion_paf.cuda()
 
     # Create optimizer
     optimizer = create_optimizer(opt, model)
@@ -80,6 +80,7 @@ def main():
             cv2.imwrite("img.jpg", np.transpose(img_basic, (1, 2, 0)).shape)
             for i in range(19):
                 cv2.imwrite("hm_" + str(i) + ".jpg", heatmap_avg)
+            break
 
     # validate_net(test_loader, model, criterion_hm, criterion_paf, viz_output=visualize_out)
 
