@@ -52,9 +52,9 @@ def step(data_loader, model, criterion_hm, criterion_paf, to_train=False, optimi
 
 
 def train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, optimizer,
-              n_epochs, val_interval, learn_rate, drop_lr, save_dir, viz_output=False, latest_inx=0):
+              n_epochs, val_interval, learn_rate, drop_lr, save_dir, viz_output=False, latest_epochs=0):
     heatmap_loss_avg, paf_loss_avg = 0.0, 0.0
-    for epoch in range(latest_inx + 1, latest_inx + n_epochs + 1):
+    for epoch in range(latest_epochs + 1, latest_epochs + n_epochs + 1):
         writer = SummaryWriter(os.path.join(save_dir, 'runs'))
         print("Epoch: ", epoch)
         adjust_learning_rate(optimizer, epoch, drop_lr, learn_rate)
