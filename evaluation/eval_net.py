@@ -85,6 +85,7 @@ def new_eval_net(data_loader, model, opts):
     with torch.no_grad():
         img, heat_map, paf, ignore_mask, _ = dataset[index]
         print(heat_map.shape)
+        np.set_printoptions(threshold=np.inf)
         print(heat_map[0])
 
         height = img.shape[1]
