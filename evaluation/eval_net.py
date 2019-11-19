@@ -86,6 +86,9 @@ def new_eval_net(data_loader, model, opts):
         img, heat_map, paf, ignore_mask, _ = dataset[index]
         print(img[0])
         print("Adfad")
+        img, heat_map, paf, ignore_mask, _ = dataset[index]
+        print(img[0])
+
         imgs, heatmap_t, paf_t, ignore_mask_t, keypoints = dataset.get_imgs_multiscale(index, scales, flip=False)
         height = img.shape[1]
         width = img.shape[2]
