@@ -78,10 +78,9 @@ def main():
         paf_avg = sum(paf_avg_lst) / n_imgs
         import cv2
         img, heat_map, paf, ignore_mask, keypoints = dataset.get_item_raw(index, False)
-        cv2.imwrite("img.jpg", img * 255)
-        print(img * 255)
+        cv2.imwrite("eval/img.jpg", img * 255)
         for i in range(19):
-            cv2.imwrite("hm_" + str(i) + ".jpg", heatmap_avg[i])
+            cv2.imwrite("eval/hm_" + str(i) + ".jpg", heatmap_avg[i])
 
     # new_eval_net(test_loader, model, opt)
 
