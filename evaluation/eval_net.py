@@ -84,6 +84,8 @@ def new_eval_net(data_loader, model, opts):
 
     with torch.no_grad():
         img, heat_map, paf, ignore_mask, _ = dataset[index]
+        print(heat_map.shape)
+        print(heat_map[0])
 
         height = img.shape[1]
         width = img.shape[2]
@@ -92,12 +94,11 @@ def new_eval_net(data_loader, model, opts):
 
         heatmaps, pafs = model(img_torch)
         heatmap = heatmaps.data.cpu().numpy()[0]
-        print(heatmap[0])
-        print("ASd")
+        print(heatmap.shape)
         paf = pafs.data.cpu().numpy()[0]
         heatmap = resize_hm(heatmap, height)
         paf = resize_hm(paf, height)
-        print(heatmap[0])
+        print(heatmap.shape)
 
         raw_img, heat_map, paf, ignore_mask, keypoints = dataset.get_item_raw(index, False)
         cv2.imwrite("eval/img.jpg", raw_img * 255)
