@@ -24,7 +24,7 @@ class Opts:
         self.parser.add_argument('-dataset', default='coco', help='Dataset')
         self.parser.add_argument('-model', default='vgg', help='Model')
         self.parser.add_argument('-batchSize', default=8, type=int, help='Batch Size')
-        self.parser.add_argument('-LR', default=1e-3, type=float, help='Learn Rate')
+        self.parser.add_argument('-LR', default=1e-4, type=float, help='Learn Rate')
         self.parser.add_argument('-nEpoch', default=20, type=int, help='Number of Epochs')
         self.parser.add_argument('-dropLR', type=float, default=20, help='Drop LR')
         self.parser.add_argument('-valInterval', type=int, default=1, help='Val Interval')
