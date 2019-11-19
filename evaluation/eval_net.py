@@ -84,6 +84,10 @@ def new_eval_net(data_loader, model, opts):
 
     with torch.no_grad():
         img, heat_map, paf, ignore_mask, _ = dataset[index]
+        imgs, heatmap_t, paf_t, ignore_mask_t, keypoints = dataset.get_imgs_multiscale(index, scales, flip=False)
+        print(img)
+        print("Adfad")
+        print(imgs[0])
         height = img.shape[1]
         width = img.shape[2]
         img_torch = torch.from_numpy(img).float().cuda()
@@ -93,10 +97,9 @@ def new_eval_net(data_loader, model, opts):
         heatmap = heatmaps.data.cpu().numpy()[0]
         paf = pafs.data.cpu().numpy()[0]
         heatmap = resize_hm(heatmap, height)
-        print(heatmap[0])
         paf = resize_hm(paf, height)
 
         raw_img, heat_map, paf, ignore_mask, keypoints = dataset.get_item_raw(index, False)
         cv2.imwrite("eval/img.jpg", raw_img * 255)
         for i in range(19):
-            cv2.imwrite("eval/hm_" + str(i) + ".jpg", heatmap[i])
+            cv2.imwrite("eval/hm_" + str(i) + ".jpg", heatmap[i] * 255)
