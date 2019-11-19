@@ -9,6 +9,7 @@ if __name__ == '__main__':
         coco_dataset = CocoDataSet(opts.data, opts, split)
         for i in range(len(coco_dataset)):
             img, heatmaps, paf, ignore_mask, keypoints = coco_dataset.get_item_raw(i)
-            print(heatmaps.shape)
-            break
-        break
+            img = (img * 255.).astype('uint8')
+            visualize_keypoints(img, keypoints, BODY_PARTS)
+            visualize_heatmap(img, heatmaps)
+            visualize_paf(img, paf)

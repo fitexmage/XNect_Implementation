@@ -15,6 +15,9 @@ class Conv(nn.Module):
         conv = nn.Conv2d(self.inp, self.oup, self.kernel, padding=self.padding).cuda()(x)
         bn = nn.BatchNorm2d(self.oup).cuda()(conv)
         relu = nn.ReLU(inplace=True).cuda()(bn)
+        # conv = nn.Conv2d(self.inp, self.oup, self.kernel, padding=self.padding)(x)
+        # bn = nn.BatchNorm2d(self.oup)(conv)
+        # relu = nn.ReLU(inplace=True)(bn)
         return relu
 
 
@@ -28,10 +31,12 @@ class Deconv(nn.Module):
         self.groups = groups
 
     def forward(self, x):
-
         deconv = nn.ConvTranspose2d(self.inp, self.oup, self.kernel, self.stride, padding=1, groups=self.groups).cuda()(x)
         bn = nn.BatchNorm2d(self.oup).cuda()(deconv)
         relu = nn.ReLU(inplace=True).cuda()(bn)
+        # deconv = nn.ConvTranspose2d(self.inp, self.oup, self.kernel, self.stride, padding=1, groups=self.groups)(x)
+        # bn = nn.BatchNorm2d(self.oup)(deconv)
+        # relu = nn.ReLU(inplace=True)(bn)
         return relu
 
 
@@ -51,7 +56,7 @@ class Stage_1_Model(nn.Module):
         self.conv_3d_1 = Conv(416, 256, 1, 0)
         self.deconv_3d_2 = Deconv(256, 192, kernel=4, stride=2, groups=4)
         self.conv_3d_3 = Conv(192, 160, 3, 1)
-        self.conv_3d_5 = Conv(160, 160, 1, 1)
+        self.conv_3d_5 = Conv(160, 160, 1, 0)
         self.conv_3d_6 = Conv(160, 128, 3, 1)
         self.conv_3d_7 = Conv(128, self.num_joints * 3, 3, 1)
 

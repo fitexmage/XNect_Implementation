@@ -70,3 +70,32 @@ def eval_net(data_loader, model, opts):
     print ("runtime statistics for all images")
     print(scipy.stats.describe(runtimes))
     return outputs, dataset.indices[:dataset_len]
+
+def new_eval_net(data_loader, model, opts):
+    model.eval()
+    dataset = data_loader.dataset
+    scales = [1., 0.5, 0.75, 1.25, 1.5, 2.0]
+    assert (scales[0] == 1)
+    n_scales = len(scales)
+
+    from data_process.process_utils import resize_hm
+    import cv2
+    index = 0
+
+    with torch.no_grad():
+        img, heat_map, paf, ignore_mask, _ = dataset[index]
+        height = img.shape[1]
+        width = img.shape[2]
+        img_torch = torch.from_numpy(img).float().cuda()
+        img_torch = torch.unsqueeze(img_torch, 0)
+
+        heatmaps, pafs = model(img_torch)
+        heatmap = heatmaps.data.cpu().numpy()[0]
+        paf = pafs.data.cpu().numpy()[0]
+        heatmap = resize_hm(heatmap, height)
+        paf = resize_hm(paf, height)
+
+        raw_img, heat_map, paf, ignore_mask, keypoints = dataset.get_item_raw(index, False)
+        cv2.imwrite("eval/img.jpg", raw_img * 255)
+        for i in range(19):
+            cv2.imwrite("eval/hm_" + str(i) + ".jpg", heatmap[i])

@@ -98,7 +98,7 @@ class AverageMeter(object):
 
 
 def adjust_learning_rate(optimizer, epoch, dropLR, LR):
-    lr = LR * (0.25 ** (epoch // dropLR))
+    lr = LR * (0.4 ** (epoch // dropLR))
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
     print("Learning Rate:", lr)
