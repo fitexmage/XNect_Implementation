@@ -92,6 +92,8 @@ def new_eval_net(data_loader, model, opts):
 
         heatmaps, pafs = model(img_torch)
         heatmap = heatmaps.data.cpu().numpy()[0]
+        print(heatmap[0])
+        print("ASd")
         paf = pafs.data.cpu().numpy()[0]
         heatmap = resize_hm(heatmap, height)
         paf = resize_hm(paf, height)
