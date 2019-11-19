@@ -92,9 +92,9 @@ def new_eval_net(data_loader, model, opts):
 
         heatmaps, pafs = model(img_torch)
         heatmap = heatmaps.data.cpu().numpy()[0]
+        paf = pafs.data.cpu().numpy()[0]
         print(np.sum(heatmap < 0))
         print(np.sum(heatmap > 1))
-        paf = pafs.data.cpu().numpy()[0]
         heatmap = resize_hm(heatmap, height)
         paf = resize_hm(paf, height)
         print(np.sum(heatmap < 0))
