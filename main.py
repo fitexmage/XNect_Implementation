@@ -21,9 +21,9 @@ def main():
 
     # Create nn
     model, criterion_hm, criterion_paf, latest_inx = create_model(opt)
-    model = model.cuda()
-    criterion_hm = criterion_hm.cuda()
-    criterion_paf = criterion_paf.cuda()
+    # model = model.cuda()
+    # criterion_hm = criterion_hm.cuda()
+    # criterion_paf = criterion_paf.cuda()
 
     # Create optimizer
     optimizer = create_optimizer(opt, model)
@@ -37,8 +37,9 @@ def main():
     visualize_out = opt.vizOut
 
     # train/ test
-    train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, optimizer, n_epochs,
-              val_interval, learn_rate, drop_lr, opt.saveDir, visualize_out, latest_inx)
+    img, heat_map, paf, ignore_mask, keypoints = test_loader.dataset.get_item_raw(0, False)
+    # train_net(train_loader, test_loader, model, criterion_hm, criterion_paf, optimizer, n_epochs,
+    #           val_interval, learn_rate, drop_lr, opt.saveDir, visualize_out, latest_inx)
 
     # model.eval()
     # dataset = test_loader.dataset
